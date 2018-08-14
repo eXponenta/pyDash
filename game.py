@@ -1,48 +1,56 @@
 
 # pylint: disable=no-member
-from app import App
+
 import pygame
 import sys
+from background import Background
 
-class Game(App):
-    def __init__(self):
-        App.__init__(self)        
-        pygame.init()
-        pygame.display.init()
-        
+ASSETS =  {
+    "BG":"./src/bg.jpg",
+    "GRAD_BG":"./src/grad_bg.png"
+}
+
+class Game(object):
+    def __init__(self, app):
+        self.app = app
+        self.assets = ASSETS
+
         self.size = [
-            self.config.getint("DISPLAY", "width"),
-            self.config.getint("DISPLAY", "height")
+            app.config.getint("DISPLAY", "width"),
+            app.config.getint("DISPLAY", "height")
         ]
 
         flags = 0
-        if self.config.getboolean("DISPLAY", "fullscreen"):
+        if app.config.getboolean("DISPLAY", "fullscreen"):
              flags = pygame.FULLSCREEN
 
         self.renderer = pygame.display.set_mode(self.size, flags)
-        self.start()
     
+    #end of init
+
     ''' 
     Game start method
     '''
     def start(self):
-        self.active = True
+        self.bg = Background(self)
 
-        pass
+    #end off start
+
     '''
     Game update method
     '''
-    def update(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: 
-                self.active = False
-                sys.exit(0)
-        
-        #render after update 
-        self.render()
+    def update(self, dt):
+        pass
+    
+    #end of update
 
     ''' 
     Game render method
     '''
     def render(self):
+        self.bg.draw(self.renderer)
         pygame.display.flip()
+    
+    #end of render
+
+#end of Game
