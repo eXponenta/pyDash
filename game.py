@@ -3,14 +3,18 @@
 
 import pygame
 import sys
-from background import Background
+from main_stage import MainStage
 
 ASSETS =  {
-    "BG":"./src/bg.jpg",
-    "GRAD_BG":"./src/grad_bg.png"
+    "BG_FULL":"./src/bg_full.jpg",
+    "LOGO": "./src/logo.png",
+
+    "TITLE_FONT": "./src/fonts/MagistralBlackC.otf",
 }
 
 class Game(object):
+
+    current_stage = None
     def __init__(self, app):
         self.app = app
         self.assets = ASSETS
@@ -19,28 +23,30 @@ class Game(object):
             app.config.getint("DISPLAY", "width"),
             app.config.getint("DISPLAY", "height")
         ]
-
+ 
         flags = 0
         if app.config.getboolean("DISPLAY", "fullscreen"):
              flags = pygame.FULLSCREEN
 
         self.renderer = pygame.display.set_mode(self.size, flags)
-    
     #end of init
 
     ''' 
     Game start method
     '''
     def start(self):
-        self.bg = Background(self)
+        self.main_stage = MainStage(self)
 
+        self.current_stage = self.main_stage
     #end off start
 
     '''
     Game update method
     '''
     def update(self, dt):
-        pass
+        if(self.current_stage != None):
+            self.current_stage.update(dt)
+
     
     #end of update
 
@@ -48,7 +54,10 @@ class Game(object):
     Game render method
     '''
     def render(self):
-        self.bg.draw(self.renderer)
+        
+        if(self.current_stage != None):
+            self.current_stage.draw(self.renderer)
+
         pygame.display.flip()
     
     #end of render

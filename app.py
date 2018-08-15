@@ -4,8 +4,12 @@
 import sys
 import configparser
 import pygame
+import os
 
 from game import Game
+
+#force freetype
+os.environ['PYGAME_FREETYPE'] = '1'
 
 '''
 Base App class
@@ -22,7 +26,7 @@ class App(object):
         try:
             self.config.readfp(open('config.cfg'))
         except:
-            self.config['DISPLAY'] = {'width':'704', 'height':'576', 'fullscreen':'false'}
+            self.config['DISPLAY'] = {'width':'720', 'height':'576', 'fullscreen':'false'}
             self.config.write(open('config.cfg', 'w'))
         
         pygame.init()

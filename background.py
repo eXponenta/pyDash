@@ -7,21 +7,23 @@ class Background(Sprite):
     def __init__(self, game):
         Sprite.__init__(self)
         
-        _tile = pygame.image.load(game.assets["BG"])
-        _grad = pygame.image.load(game.assets["GRAD_BG"]).convert_alpha()
-        _grad = pygame.transform.smoothscale(_grad, game.size)
+        self.image = pygame.image.load(game.assets["BG_FULL"]).convert()
         
-        self.image = pygame.surface.Surface(game.size).convert()
-        self.rect = pygame.rect.Rect(0,0, game.size[0], game.size[1])
+        _logo = pygame.image.load(game.assets["LOGO"]).convert_alpha()
+        _logo_rect = _logo.get_rect()
 
-        _t_size = _tile.get_size()
+        self.rect = pygame.rect.Rect(0,0, game.size[0], game.size[1])
         
-        # blit one pass tiled background
-        for coll in range(math.ceil(game.size[0] / _t_size[0])):
-            for row in range(math.ceil(game.size[1] / _t_size[1])):
-                self.image.blit(_tile,(coll * _t_size[0], row * _t_size[1]))
-        
-        self.image.blit(_grad, self.rect)
+        #если запихают другого размера
+        self.image = pygame.transform.smoothscale(self.image, game.size)
+
+        #logo, так как статичный рендер
+        _logo_rect = _logo_rect.move(50,36)
+        self.image.blit(_logo, _logo_rect)
+
+        _line = pygame.Rect(45, 80, 630, 3)
+        pygame.draw.rect(self.image,(255,255,255), _line)
+
 
     #end of init
 
