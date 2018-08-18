@@ -50,12 +50,6 @@ class MainMenuPlatformList(Group):
         self.add(*self.buttons)
     
     #end of createButtons
-
-    def nextItem(self):
-        self.selected +=1
-    
-    def lastItem(self):
-        self.selected -=1
     
     @property
     def selected(self):

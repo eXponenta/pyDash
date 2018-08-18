@@ -6,12 +6,14 @@ class Input(object):
     
     EVENT_UP = "up"
     EVENT_DOWN = "down"
+    EVENT_NEXT = "enter"
+    EVENT_BACK = "back"
 
     EVENT_2_KEYS = {
-    
         EVENT_UP: [pygame.K_UP],
-        EVENT_DOWN: [pygame.K_DOWN]
-    
+        EVENT_DOWN: [pygame.K_DOWN],
+        EVENT_NEXT: [pygame.K_RETURN, pygame.K_SPACE],
+        EVENT_BACK: [pygame.K_ESCAPE]
     }
 
     def __init__(self):

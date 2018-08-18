@@ -19,7 +19,11 @@ class TextSprite(Sprite):
 
     def set_text(self, text, color = None):
         self.text = text
-        self.image = self.font.render(text, True, color or (255,255,255))
+        if(self.text != None):
+            self.image = self.font.render(text, True, color or (255,255,255))
+        else:
+            self.image.fill((255,255,255,0))
+        
         self.rect = self.image.get_rect()
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
