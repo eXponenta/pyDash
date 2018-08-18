@@ -21,7 +21,7 @@ class Background(Sprite):
         _logo_rect = _logo_rect.move(50,36)
         self.image.blit(_logo, _logo_rect)
 
-        _line = pygame.Rect(45, 80, 630, 3)
+        _line = pygame.Rect(45, 80, 645, 3)
         pygame.draw.rect(self.image,(255,255,255), _line)
 
 

@@ -10,6 +10,19 @@ ASSETS =  {
     "LOGO": "./src/logo.png",
 
     "TITLE_FONT": "./src/fonts/MagistralBlackC.otf",
+    "LIST_FONT":"./src/fonts/BebasNeue Regular.otf",
+
+    "ICONS":[
+        {"title":"ИЗБРАННОЕ", "img":"./src/icons/fav_{0}.png"}, #favorites
+        {"title":"SEGA GENESIS", "img":"./src/icons/gen_{0}.png"}, #sega gen
+        {"title":"SEGA MASTER SYSTEM", "img":"./src/icons/sms_{0}.png"}, #sms
+        {"title":"NES", "img":"./src/icons/nes_{0}.png"}, #nes
+        {"title":"SNES", "img":"./src/icons/snes_{0}.png"}, #snes
+        {"title":"SD CARD", "img":"./src/icons/sdcard_{0}.png"}, #sdcard
+        {"title":"НАСТРОЙКИ", "img":"./src/icons/opt_{0}.png"}, #config
+    ],
+
+    "SELECTOR": "./src/icons/border.png"
 }
 
 class Game(object):

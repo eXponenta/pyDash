@@ -7,6 +7,7 @@ import pygame
 import os
 
 from game import Game
+from input import Input
 
 #force freetype
 os.environ['PYGAME_FREETYPE'] = '1'
@@ -30,6 +31,7 @@ class App(object):
             self.config.write(open('config.cfg', 'w'))
         
         pygame.init()
+        self.input = Input()
         self.game = Game(self)
     
     #end of init
@@ -49,9 +51,13 @@ class App(object):
             self._lastTick = t
             
             for event in pygame.event.get():
+                
+                self.input.collectEvents(event)
+                
                 if event.type == pygame.QUIT: 
                     self.game.active = False
                     sys.exit(0)
+
                 
             self.game.update(self.deltaTime)
             self.game.render()
