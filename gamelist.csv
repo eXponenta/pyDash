@@ -1,0 +1,2 @@
+RomPath, Console, Name, Publisher, CmdFS, CmdWin, Cover, ScreenShots
+'./pico/Sonic the Hedgehog.bin', GEN, Sonic the Hedgehog, SEGA, ./pico/PicoDrive %f,./pico/PicoDrive %f, , 

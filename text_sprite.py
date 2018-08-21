@@ -3,7 +3,7 @@ import pygame
 from pygame.font import Font
 from sprite import Sprite
 
-print('def font' + pygame.font.get_default_font())
+#print('def font' + pygame.font.get_default_font())
 
 
 class TextSprite(Sprite):

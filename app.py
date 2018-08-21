@@ -27,7 +27,8 @@ class App(object):
         try:
             self.config.readfp(open('config.cfg'))
         except:
-            self.config['DISPLAY'] = {'width':'720', 'height':'576', 'fullscreen':'false'}
+            self.config['DISPLAY'] = {'fullscreen':'false'}
+            self.config['PATHS'] = {'gamelist':'./gamelist.csv', 'favorites':'./fav.csv' ,'sdcard':'.'}
             self.config.write(open('config.cfg', 'w'))
         
         pygame.init()

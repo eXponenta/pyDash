@@ -33,8 +33,8 @@ class Game(object):
         self.assets = ASSETS
 
         self.size = [
-            app.config.getint("DISPLAY", "width"),
-            app.config.getint("DISPLAY", "height")
+            720,#app.config.getint("DISPLAY", "width"),
+            576 #app.config.getint("DISPLAY", "height")
         ]
  
         flags = 0
