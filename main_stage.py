@@ -9,6 +9,8 @@ from main_menu_platform_list import MainMenuPlatformList
 from sprite import Sprite
 from file_list import FileList
 from item_constructor import BaseItemConstructor, DirlistItemConstructor, RomDataItemsConstructor
+from executor import Executor, RomExecutor 
+
 
 class MainStage(Group):
 
@@ -20,8 +22,10 @@ class MainStage(Group):
         Group.__init__(self)
 
         self.game = game
-        
-        self.game_list =  RomDataItemsConstructor("./gamelist.csv")
+        self.rom_executor = RomExecutor()
+        self.game_list = RomDataItemsConstructor(game.app.config.get("PATHS", "gamelist"))
+
+        self.sdcard_constructor =  DirlistItemConstructor(game.app.config.get("PATHS", "sdcard"))
 
         self.all_constructors = [
             BaseItemConstructor(),  # for favorites
@@ -29,7 +33,7 @@ class MainStage(Group):
             self.game_list.getConsole("SMS"),  # for sms
             self.game_list.getConsole("NES"),  # for nes
             self.game_list.getConsole("SNES"),  # for snes
-            DirlistItemConstructor("C:/"),
+            self.sdcard_constructor,
             None
         ]
 
@@ -72,7 +76,7 @@ class MainStage(Group):
 
             self.item_constructor = self.all_constructors[self.platform.selected]
             self.file_list.set_items(self.item_constructor,
-             not isinstance(self.item_constructor, DirlistItemConstructor))
+                                     not isinstance(self.item_constructor, DirlistItemConstructor))
             self.file_list.deselect_all()
         else:
             self.file_list.selected += dir
@@ -86,8 +90,14 @@ class MainStage(Group):
             return
 
         if (self.selector_state == MainStage.SELECTOR_LIST):
-            if self.item_constructor.next(self.file_list.selected):
-                self.file_list.set_items(self.item_constructor)
+            
+            if(isinstance(self.item_constructor, DirlistItemConstructor)):
+                if self.item_constructor.next(self.file_list.selected):
+                    self.file_list.set_items(self.item_constructor)
+            else:
+                rom = self.item_constructor.all[self.file_list.selected]
+                print(self.rom_executor.exec(rom))
+
 
     # end of select
 

@@ -12,9 +12,9 @@ class BaseItemConstructor(object):
 
 class DirlistItemConstructor(BaseItemConstructor):
 
-    def __init__(self, startPath):
+    def __init__(self, startPath, executor = None):
         BaseItemConstructor.__init__(self)
-
+        self.executor = executor
         self.set_path(startPath)
     # enf of init
 
@@ -43,7 +43,8 @@ class DirlistItemConstructor(BaseItemConstructor):
             self.set_path(path)
             return True
 
-        os.system(f'\"{path}\"')
+        if(self.executor != None):
+            self.executor.exec(path)
         return False
 
 
@@ -51,6 +52,11 @@ class RomDataEntry(object):
     def __init__(self, data):
         
         self.rom, self.console, self.name, self.publ, self.cmdfs, self.cmdwin, self.cover, self.screens = data
+        self.rom = self.rom.strip()
+        self.console = self.console.strip().upper()
+        self.publ = self.publ.strip()
+        self.cmdfs = self.cmdfs.strip()
+        self.cmdwin = self.cmdwin.strip()
         #self.screens = self.screens.split('|')
     
     # end of init
