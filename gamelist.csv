@@ -1,2 +1,6 @@
 RomPath, Console, Name, Publisher, CmdFS, CmdWin, Cover, ScreenShots
 .\pico\Sonic the Hedgehog.bin, GEN, Sonic the Hedgehog, SEGA, .\pico\PicoDrive.exe %f,./pico/PicoDrive %f, , 
+./path/to/sms/rom.sms, SMS, FIXME Sega master system Rom , SEGA, , , ,
+./path/to/nes/rom.nes, NES, FIXME NES Rom , SEGA, , , ,
+./path/to/snes/rom.snes, SNES, FIXME SNES Rom , SEGA, , , ,
+
