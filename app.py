@@ -2,12 +2,12 @@
 # pylint: disable=no-member
 
 import sys
-import configparser
 import pygame
 import os
 
 from game import Game
 from input import Input
+from iniparser import IniParser
 
 #force freetype
 os.environ['PYGAME_FREETYPE'] = '1'
@@ -20,16 +20,16 @@ class App(object):
     
     def __init__(self):
         
-        self.config = configparser.ConfigParser()
+        self.config =  IniParser()
         self._lastTick = 0
         self.deltaTime = 0
 
         try:
-            self.config.readfp(open('config.cfg'))
+            self.config.read(open('config.cfg'))
         except:
-            self.config['DISPLAY'] = {'fullscreen':'false'}
-            self.config['PATHS'] = {'gamelist':'./gamelist.csv', 'favorites':'./fav.csv' ,'sdcard':'.'}
-            self.config.write(open('config.cfg', 'w'))
+            self.config.data['DISPLAY'] = {'fullscreen':'false'}
+            self.config.data['PATHS'] = {'gamelist':'./gamelist.csv', 'favorites':'./fav.csv' ,'sdcard':'.'}
+            self.config.write(open('config.cfg','w'))
         
         pygame.init()
         self.input = Input()

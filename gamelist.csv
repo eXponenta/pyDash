@@ -3,4 +3,3 @@ RomPath, Console, Name, Publisher, CmdFS, CmdWin, Cover, ScreenShots
 ./path/to/sms/rom.sms, SMS, FIXME Sega master system Rom , SEGA, , , ,
 ./path/to/nes/rom.nes, NES, FIXME NES Rom , SEGA, , , ,
 ./path/to/snes/rom.snes, SNES, FIXME SNES Rom , SEGA, , , ,
-
