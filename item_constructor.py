@@ -44,7 +44,7 @@ class DirlistItemConstructor(BaseItemConstructor):
             return True
 
         if(self.executor != None):
-            self.executor.exec(path)
+            return self.executor.exec(path)
         return False
 
 

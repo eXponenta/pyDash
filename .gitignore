@@ -9,3 +9,5 @@ compile/
 bin_no_config/
 
 *.zip
+
+pydash_native_mode/

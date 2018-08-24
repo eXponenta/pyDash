@@ -25,7 +25,7 @@ class MainStage(Group):
         self.rom_executor = RomExecutor()
         self.game_list = RomDataItemsConstructor(game.app.config.get("PATHS", "gamelist"))
 
-        self.sdcard_constructor =  DirlistItemConstructor(game.app.config.get("PATHS", "sdcard"))
+        self.sdcard_constructor =  DirlistItemConstructor(game.app.config.get("PATHS", "sdcard"), Executor())
 
         self.all_constructors = [
             BaseItemConstructor(),  # for favorites
