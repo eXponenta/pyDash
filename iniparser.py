@@ -27,9 +27,9 @@ class IniParser(object):
     
     def write(self, f):
         for sec in self.data:
-            f.write(f"[{sec}]\n")
+            f.write("[%s]\n" % sec)
             for v in self.data[sec]:
-                f.write(f"{v} = {self.data[sec][v]}\n")
+                f.write("%s = %s\n" % (v, self.data[sec][v]))
             f.write("\n")
 
 

@@ -86,8 +86,7 @@ class FileList(pygame.sprite.Group):
 
     def update_counter(self, all_pages, current_page):
 
-        self.page_counter.set_text(
-            'СТРАНИЦА {0} ИЗ {1}'.format(current_page, all_pages))
+        self.page_counter.set_text('СТРАНИЦА %d ИЗ %d' % (current_page, all_pages))
         self.page_counter.pos = [self.game.size[0] -
                                  40 - self.page_counter.rect.w, 520]
 

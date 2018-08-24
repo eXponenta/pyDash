@@ -12,17 +12,17 @@ class Executor(object):
         if(resolve):
             command = self.resolve(command)
         
-        print(f"{self.__class__.__name__ } Try exec: {command}")
+        print("%s Try exec: %s" % (self.__class__.__name__ , command))
         try:
             if self.use_system:
                 return self.exec_system(command)
         except Exception as e:
-            print(f"{self.__class__.__name__ } Error:{e}")
+            print("%s Error:%s" % (self.__class__.__name__ , e))
             return -1
     #end of exec
 
     def exec_system(self, command):
-        return os.system(f'\"{command}\"')
+        return os.system('\"%s\"' % command)
     
     #end of exec_system
 
@@ -44,7 +44,7 @@ class Executor(object):
     #end of resolve    
 
     def generate(self, rule, path):
-        rule = rule.replace("%f", f'\"{path}\"') # replace full file name with path
+        rule = rule.replace("%f", ('\"%s\"' % path)) # replace full file name with path
         
         name = os.path.splitext(os.path.basename(path))[0]
         rule = rule.replace("%name", name) # replace name without ext
@@ -63,7 +63,7 @@ class RomExecutor(Executor):
             if(fullscreen):
                 command = romData.cmdfs
             
-            command = command.replace("%f", f'\"{romData.rom}\"')
+            command = command.replace("%f", ('\"%s\"' % romData.rom))
            
             Executor.exec(self,command, False)
 

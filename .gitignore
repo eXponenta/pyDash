@@ -5,3 +5,7 @@ bin/
 *.pyapp
 
 compile/
+
+bin_no_config/
+
+*.zip

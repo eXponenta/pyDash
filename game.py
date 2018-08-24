@@ -41,7 +41,14 @@ class Game(object):
         if app.config.getboolean("DISPLAY", "fullscreen"):
              flags = pygame.FULLSCREEN
 
-        self.renderer = pygame.display.set_mode(self.size, flags)
+        self.native = app.config.getboolean("DISPLAY", "nativemode")
+        if(self.native):
+            self.virtual_render = pygame.display.set_mode([0,0], flags)
+            self.renderer = pygame.surface.Surface(self.size)
+
+            print("RUN IN NATIVE RESOLUTION: %d %d" % (self.virtual_render.get_width(), self.virtual_render.get_height()))
+        else:
+            self.renderer = pygame.display.set_mode(self.size, flags, 32)
     #end of init
 
     ''' 
@@ -70,7 +77,11 @@ class Game(object):
         
         if(self.current_stage != None):
             self.current_stage.draw(self.renderer)
-
+        
+        if(self.native):
+            size = [self.virtual_render.get_width(), self.virtual_render.get_height()]           
+            pygame.transform.scale(self.renderer, size, self.virtual_render)
+ 
         pygame.display.flip()
     
     #end of render
