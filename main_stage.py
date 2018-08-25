@@ -22,6 +22,8 @@ class MainStage(Group):
         Group.__init__(self)
 
         self.game = game
+        self.need_draw = True
+
         self.rom_executor = RomExecutor()
         self.game_list = RomDataItemsConstructor(game.app.config.get("PATHS", "gamelist"))
 
@@ -59,6 +61,7 @@ class MainStage(Group):
         game.app.input.addEvent(input.Input.EVENT_NEXT, self.select)
         game.app.input.addEvent(input.Input.EVENT_BACK, self.selectBack)
 
+        self.parts = [self.title_text, self.platform, self.file_list]
     # end of init
 
     def nextItem(self):
@@ -118,18 +121,26 @@ class MainStage(Group):
     # end of update_title_text
 
     def update(self, dt):
-
         Group.update(self, dt)
 
     # end of update
 
     def draw(self, renderer):
-        Group.draw(self, renderer)
+        #Group.draw(self, renderer)
 
-        self.bg.draw(renderer)
-        self.title_text.draw(renderer)
-        self.platform.draw(renderer)
-        self.file_list.draw(renderer)
+        if(self.need_draw) : 
+            self.bg.draw(renderer)
+            self.need_draw = False
+
+        
+        _updated = False
+        for p in self.parts:
+            if(p.need_draw):
+                renderer.blit(self.bg.image, p.last_rect, p.last_rect)
+                p.draw(renderer)
+                _updated = True
+        
+        return _updated
 
     # end of draw
 

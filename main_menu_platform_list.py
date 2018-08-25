@@ -10,6 +10,8 @@ class MainMenuPlatformList(Group):
     
     def __init__(self, game):
         Group.__init__(self)
+        
+        self.need_draw = True
 
         self.__selected = 0
         self.game = game
@@ -18,6 +20,9 @@ class MainMenuPlatformList(Group):
         self.add(self.selector)
         self.createButtons()
 
+        self.__rect = None
+        self.last_rect = self.rect
+        
         self.selected = 0
     #end of init
 
@@ -27,7 +32,8 @@ class MainMenuPlatformList(Group):
     #end of update
 
     def draw(self, renderer):
-    
+        self.need_draw = False
+
         Group.draw(self, renderer)
     
     #end of draw
@@ -47,16 +53,31 @@ class MainMenuPlatformList(Group):
             _btn.pos = [OFFSET[0], OFFSET[1] + (_btn.rect.height + SPASE) * idx]
             self.buttons.append(_btn)
         
+        
+        self.selector.pos = [self.buttons[0].pos[0] - 5, self.buttons[0].pos[1] - 5]
         self.add(*self.buttons)
     
     #end of createButtons
     
+    @property
+    def rect(self):
+        self.last_rect = self.__rect
+        rect = self.selector.rect
+
+        for b in self.buttons:
+            rect = rect.union(b.rect)
+
+        self.__rect = rect
+        return rect
+
     @property
     def selected(self):
         return self.__selected
    
     @selected.setter
     def selected(self, id):
+
+        if(id == self.selected): return
 
         if(self.buttons[self.__selected].state != ImageButton.DISABLED):
             self.buttons[self.__selected].state = ImageButton.NORMAL
@@ -73,5 +94,6 @@ class MainMenuPlatformList(Group):
         _p = self.buttons[self.__selected].pos
         self.selector.pos = [_p[0] - 5, _p[1] - 5]
 
+        self.need_draw = True
 
 #end of MainMenuList

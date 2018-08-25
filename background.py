@@ -24,6 +24,11 @@ class Background(Sprite):
         _line = pygame.Rect(45, 80, 645, 3)
         pygame.draw.rect(self.image,(255,255,255), _line)
 
+        _bg = pygame.surface.Surface(
+            [450, 420], pygame.SRCALPHA, 32).convert_alpha()
+        _bg.fill([255, 255, 255, 20])
+        
+        self.image.blit(_bg, (240, 90))
 
     #end of init
 

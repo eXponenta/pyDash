@@ -14,12 +14,14 @@ class TextSprite(Sprite):
         Sprite.__init__(self, None)
         self.text = text
         self.set_text(text)
-        
+
     #end of init
 
     def set_text(self, text, color = None):
         self.text = text
-        if(self.text != None):
+        self.last_rect = self.rect.copy()
+        
+        if(self.text != None and self.text != ""):
             self.image = self.font.render(text, True, color or (255,255,255))
         else:
             self.image.fill((255,255,255,0))
@@ -27,6 +29,8 @@ class TextSprite(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
+
+        self.need_draw = True
     
     def set_color(self, color):
         self.set_text(self.text, color)
