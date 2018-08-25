@@ -38,18 +38,44 @@ class Game(object):
         ]
  
         flags = 0
+
         if app.config.getboolean("DISPLAY", "fullscreen"):
              flags = pygame.FULLSCREEN
+        
+        _tryogl = app.config.getboolean("DISPLAY","opengl") and pygame.OPENGL
+
+        print(_tryogl)
 
         self.native = app.config.getboolean("DISPLAY", "nativemode")
+
         if(self.native):
-            self.virtual_render = pygame.display.set_mode([0,0], flags)
+
+            near = (0,0)
+            
+            # try get hardware asselerated
+            _testFlags = flags | pygame.HWSURFACE | _tryogl
+            _modes =  pygame.display.list_modes(32, _testFlags)
+            
+            if (_modes == -1):
+                _modes = [self.size]
+                flags = _testFlags
+
+            elif (len(_modes) == 0):
+                _modes = pygame.display.list_modes(32, flags)
+
+            _nears = [m for m in _modes[::-1] if m[0] >= self.size[0] and m[1] >= self.size[1]]
+            if(len(_nears) > 0):
+                near = _nears[0]
+
+            print ("[MODE] OPENGL (%s), HW (%s), RES: %s" %( _tryogl and 1, (flags & pygame.HWSURFACE) , near))
+    
+            self.virtual_render = pygame.display.set_mode(near, flags)
             self.renderer = pygame.surface.Surface(self.size)
 
-            print("RUN IN NATIVE RESOLUTION: %d %d" % (self.virtual_render.get_width(), self.virtual_render.get_height()))
         else:
             self.renderer = pygame.display.set_mode(self.size, flags, 32)
     #end of init
+
 
     ''' 
     Game start method

@@ -27,7 +27,7 @@ class App(object):
         try:
             self.config.read(open('config.cfg'))
         except:
-            self.config.data['DISPLAY'] = {'fullscreen':'false', 'nativemode': 'false'}
+            self.config.data['DISPLAY'] = {'fullscreen':'false', 'nativemode': 'false', 'opengl' : 'false'}
             self.config.data['PATHS'] = {'gamelist':'./gamelist.csv', 'favorites':'./fav.csv' ,'sdcard':'.'}
             self.config.write(open('config.cfg','w'))
         
