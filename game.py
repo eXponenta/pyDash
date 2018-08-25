@@ -135,8 +135,8 @@ class Game(object):
             pygame.transform.scale(self.renderer, size, self.virtual_render)
             _cscreen = self.virtual_render
         
-        _cscreen.fill(0, self.fps_text.last_rect)
-        self.fps_text.draw(_cscreen)
+        #_cscreen.fill(0, self.fps_text.last_rect)
+        #self.fps_text.draw(_cscreen)
 
         if(_flip):
             pygame.display.flip()

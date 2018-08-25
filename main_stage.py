@@ -173,8 +173,6 @@ class MainStage(Group):
                 _r = p.rect
                 _updated = True
 
-                pygame.draw.rect(renderer, (255,0,0), _r, 2)
-
         return _updated
 
     # end of draw
