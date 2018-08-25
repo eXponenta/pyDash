@@ -49,13 +49,8 @@ class Input(object):
         if(_ext_type == None):
             return
 
-        # try:
         for _e in self.__envents[_ext_type]:
             _e()
-        #    print(_e)
-        # except:
-        #    print("Error execute method")
-        #    pass
 
     def addEvent(self, eventType, event):
 

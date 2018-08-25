@@ -23,6 +23,9 @@ class MainStage(Group):
 
         self.game = game
         self.need_draw = True
+        
+        self.key_test_period = 0.25
+        self.__tick = 0
 
         self.rom_executor = RomExecutor()
         self.game_list = RomDataItemsConstructor(
@@ -62,9 +65,25 @@ class MainStage(Group):
         game.app.input.addEvent(input.Input.EVENT_UP, self.lastItem)
         game.app.input.addEvent(input.Input.EVENT_NEXT, self.select)
         game.app.input.addEvent(input.Input.EVENT_BACK, self.selectBack)
+        
+        game.app.input.addEvent(input.Input.EVENT_LEFT, self.last10Item_list)
+        game.app.input.addEvent(input.Input.EVENT_RIGHT, self.next10Item_list)
+        
 
         self.parts = [self.title_text, self.platform, self.file_list]
+
     # end of init
+
+    def next10Item_list(self):
+        if (self.selector_state != MainStage.SELECTOR_LIST):
+            return
+        self.file_list.selected = (1 + self.file_list.selected // self.file_list.ITEMS_PER_PAGE) * self.file_list.ITEMS_PER_PAGE
+    
+    
+    def last10Item_list(self):
+        if (self.selector_state != MainStage.SELECTOR_LIST):
+            return
+        self.file_list.selected = (-1 + self.file_list.selected // self.file_list.ITEMS_PER_PAGE) * self.file_list.ITEMS_PER_PAGE
 
     def nextItem(self):
         self.lastNextItem(1)
@@ -74,6 +93,7 @@ class MainStage(Group):
         self.lastNextItem(-1)
 
     def lastNextItem(self, dir):
+        self.__tick = 0
         if(self.selector_state == MainStage.SELECTRO_ICONS):
             self.platform.selected += dir
             _title = self.game.assets["ICONS"][self.platform.selected]['title']
@@ -125,6 +145,15 @@ class MainStage(Group):
         
         Group.update(self, dt)
         self.platform.update(dt)
+
+        self.__tick += dt
+        if(self.__tick >= self.key_test_period):
+            self.__tick = 0
+            if(self.game.app.input.keys[input.Input.EVENT_UP]):
+                self.lastItem()
+            if(self.game.app.input.keys[input.Input.EVENT_DOWN]):
+                self.nextItem()
+            
 
     # end of update
 
