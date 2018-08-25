@@ -9,7 +9,7 @@ from main_menu_platform_list import MainMenuPlatformList
 from sprite import Sprite
 from file_list import FileList
 from item_constructor import BaseItemConstructor, DirlistItemConstructor, RomDataItemsConstructor
-from executor import Executor, RomExecutor 
+from executor import Executor, RomExecutor
 
 
 class MainStage(Group):
@@ -25,9 +25,11 @@ class MainStage(Group):
         self.need_draw = True
 
         self.rom_executor = RomExecutor()
-        self.game_list = RomDataItemsConstructor(game.app.config.get("PATHS", "gamelist"))
+        self.game_list = RomDataItemsConstructor(
+            game.app.config.get("PATHS", "gamelist"))
 
-        self.sdcard_constructor =  DirlistItemConstructor(game.app.config.get("PATHS", "sdcard"), Executor())
+        self.sdcard_constructor = DirlistItemConstructor(
+            game.app.config.get("PATHS", "sdcard"), Executor())
 
         self.all_constructors = [
             BaseItemConstructor(),  # for favorites
@@ -93,14 +95,13 @@ class MainStage(Group):
             return
 
         if (self.selector_state == MainStage.SELECTOR_LIST):
-            
+
             if(isinstance(self.item_constructor, DirlistItemConstructor)):
                 if self.item_constructor.next(self.file_list.selected):
                     self.file_list.set_items(self.item_constructor)
             else:
                 rom = self.item_constructor.all[self.file_list.selected]
                 print(self.rom_executor.exec(rom))
-
 
     # end of select
 
@@ -121,25 +122,30 @@ class MainStage(Group):
     # end of update_title_text
 
     def update(self, dt):
+        
         Group.update(self, dt)
+        self.platform.update(dt)
 
     # end of update
 
     def draw(self, renderer):
         #Group.draw(self, renderer)
 
-        if(self.need_draw) : 
+        if(self.need_draw):
             self.bg.draw(renderer)
             self.need_draw = False
 
-        
         _updated = False
         for p in self.parts:
             if(p.need_draw):
                 renderer.blit(self.bg.image, p.last_rect, p.last_rect)
                 p.draw(renderer)
+                #need calling for update, because last_rect cant.be updated
+                _r = p.rect
                 _updated = True
-        
+
+                pygame.draw.rect(renderer, (255,0,0), _r, 2)
+
         return _updated
 
     # end of draw

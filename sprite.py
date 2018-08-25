@@ -35,7 +35,6 @@ class Sprite(pygame.sprite.Sprite):
 
     @pos.setter
     def pos(self, pos):
-        #self.last_rect = self.rect.copy()
         self.__pos = pos
         self.rect.x = pos[0]
         self.rect.y = pos[1]
