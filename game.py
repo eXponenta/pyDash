@@ -14,13 +14,13 @@ ASSETS = {
     "LIST_FONT": "./src/fonts/BebasNeue Regular.otf",
 
     "ICONS": [
-        {"title": "ИЗБРАННОЕ", "img": "./src/icons/fav_{0}.png"},  # favorites
+        {"title": u"ИЗБРАННОЕ", "img": "./src/icons/fav_{0}.png"},  # favorites
         {"title": "SEGA GENESIS", "img": "./src/icons/gen_{0}.png"},  # sega gen
         {"title": "SEGA MASTER SYSTEM", "img": "./src/icons/sms_{0}.png"},  # sms
         {"title": "NES", "img": "./src/icons/nes_{0}.png"},  # nes
         {"title": "SNES", "img": "./src/icons/snes_{0}.png"},  # snes
         {"title": "SD CARD", "img": "./src/icons/sdcard_{0}.png"},  # sdcard
-        {"title": "НАСТРОЙКИ", "img": "./src/icons/opt_{0}.png"},  # config
+        {"title": u"НАСТРОЙКИ", "img": "./src/icons/opt_{0}.png"},  # config
     ],
 
     "SELECTOR": "./src/icons/border.png"
@@ -32,7 +32,7 @@ class Game(object):
     current_stage = None
 
     def __init__(self, app):
-        
+
         self.app = app
         self.assets = ASSETS
 
@@ -51,43 +51,38 @@ class Game(object):
             flags = pygame.FULLSCREEN
 
         _tryogl = app.config.getboolean("DISPLAY", "opengl") and pygame.OPENGL
-        self.native = app.config.getboolean("DISPLAY", "nativemode")
 
-        if(self.native):
+        near = [0, 0]
 
-            near = (0, 0)
+        # try get hardware asselerated
+        _testFlags = flags | pygame.HWSURFACE | _tryogl | pygame.DOUBLEBUF
+        _modes = pygame.display.list_modes(32, _testFlags)
 
-            # try get hardware asselerated
-            _testFlags = flags | pygame.HWSURFACE | _tryogl | pygame.DOUBLEBUF
-            _modes = pygame.display.list_modes(32, _testFlags)
+        if (_modes != -1 and len(_modes) == 0):
+            _modes = pygame.display.list_modes(32, flags)
+            #_testFlags = flags
 
-            if (_modes == -1):
-                _modes = [self.size]
-                flags = _testFlags
+        if (_modes == -1):
+            _modes = [self.size]
+            #flags = _testFlags
 
-            elif (len(_modes) == 0):
-                _modes = pygame.display.list_modes(32, flags)
+        _nears = [m for m in _modes[::-1] if m[0] >=
+                  self.size[0] and m[1] >= self.size[1]]
 
-            _nears = [m for m in _modes[::-1] if m[0] >=
-                      self.size[0] and m[1] >= self.size[1]]
-            if(len(_nears) > 0):
-                near = _nears[0]
-
+        if(len(_nears) > 0):
+            near = _nears[0]
+        try:
+            self.virtual_render = pygame.display.set_mode(near, _testFlags, 32)
             print("[MODE] OPENGL (%s), HW (%s), RES: %s" %
                   (_tryogl and 1, (flags & pygame.HWSURFACE), near))
+        except Exception as e:
+            print("[MODE] Error: \n %s" % e)
+            self.virtual_render = pygame.display.set_mode((0, 0), flags)
 
-            self.virtual_render = pygame.display.set_mode(near, flags)
-            self.renderer = pygame.surface.Surface(self.size)
+        self.renderer = pygame.surface.Surface(self.size)
 
-        else:
-            
-            print("[MODE] OPENGL (%s), HW (%s), RES: %s" %
-                  (False, (flags & pygame.HWSURFACE), self.size))
-
-            self.renderer = pygame.display.set_mode(self.size, flags, 32)
-        
         print('render info:' + str(pygame.display.Info()))
-            
+
     # end of init
 
     ''' 
@@ -107,8 +102,9 @@ class Game(object):
     def update(self, dt):
         if(self.current_stage != None):
             self.current_stage.update(dt)
-        
-        if(dt == 0) : return
+
+        if(dt == 0):
+            return
 
         if(self.count < 0.5):
             self.count += dt
@@ -128,17 +124,10 @@ class Game(object):
         _flip = False
         if(self.current_stage != None):
             _flip = self.current_stage.draw(self.renderer)
-        
-        _cscreen = self.renderer
-        if(self.native and _flip):
-            size = [self.virtual_render.get_width(), self.virtual_render.get_height()]
-            pygame.transform.scale(self.renderer, size, self.virtual_render)
-            _cscreen = self.virtual_render
-        
-        #_cscreen.fill(0, self.fps_text.last_rect)
-        #self.fps_text.draw(_cscreen)
 
         if(_flip):
+            size = [self.virtual_render.get_width(), self.virtual_render.get_height()]
+            pygame.transform.scale(self.renderer, size, self.virtual_render)
             pygame.display.flip()
 
     # end of render

@@ -83,6 +83,7 @@ class FileList(pygame.sprite.Group):
     def set_items(self, new, counters=False):
         self.__item_constructor = new
         self.counters = counters
+        self.__deselected = True
         self.update_items()
         self.selected = 0
         self.need_draw = True

@@ -34,6 +34,11 @@ class IniParser(object):
 
 
     def get(self, section, name):
+        if(not section in self.data) :
+             return ''
+        if(not name in self.data[section]) :
+             return ''
+
         return self.data[section][name]
 
     def getboolean(self, section, name):

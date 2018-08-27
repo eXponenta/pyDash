@@ -93,7 +93,7 @@ class RomDataItemsConstructor(BaseItemConstructor):
     def parse(self):
 
         try:
-            reader = csv.reader(open(self.manifestPath, 'r'))
+            reader = csv.reader(open(self.manifestPath, 'r', encoding = "utf-8"))
             for row in reader:
                 item = RomDataEntry(row)
                 self.all.append(item)
