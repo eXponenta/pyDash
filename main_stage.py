@@ -23,7 +23,7 @@ class MainStage(Group):
 
         self.game = game
         self.need_draw = True
-        
+
         self.key_test_period = 0.25
         self.__tick = 0
 
@@ -65,10 +65,9 @@ class MainStage(Group):
         game.app.input.addEvent(input.Input.EVENT_UP, self.lastItem)
         game.app.input.addEvent(input.Input.EVENT_NEXT, self.select)
         game.app.input.addEvent(input.Input.EVENT_BACK, self.selectBack)
-        
+
         game.app.input.addEvent(input.Input.EVENT_LEFT, self.last10Item_list)
         game.app.input.addEvent(input.Input.EVENT_RIGHT, self.next10Item_list)
-        
 
         self.parts = [self.title_text, self.platform, self.file_list]
 
@@ -77,13 +76,14 @@ class MainStage(Group):
     def next10Item_list(self):
         if (self.selector_state != MainStage.SELECTOR_LIST):
             return
-        self.file_list.selected = (1 + self.file_list.selected // self.file_list.ITEMS_PER_PAGE) * self.file_list.ITEMS_PER_PAGE
-    
-    
+        self.file_list.selected = (1 + self.file_list.selected //
+                                   self.file_list.ITEMS_PER_PAGE) * self.file_list.ITEMS_PER_PAGE
+
     def last10Item_list(self):
         if (self.selector_state != MainStage.SELECTOR_LIST):
             return
-        self.file_list.selected = (-1 + self.file_list.selected // self.file_list.ITEMS_PER_PAGE) * self.file_list.ITEMS_PER_PAGE
+        self.file_list.selected = (-1 + self.file_list.selected //
+                                   self.file_list.ITEMS_PER_PAGE) * self.file_list.ITEMS_PER_PAGE
 
     def nextItem(self):
         self.lastNextItem(1)
@@ -142,7 +142,7 @@ class MainStage(Group):
     # end of update_title_text
 
     def update(self, dt):
-        
+
         Group.update(self, dt)
         self.platform.update(dt)
 
@@ -153,7 +153,6 @@ class MainStage(Group):
                 self.lastItem()
             if(self.game.app.input.keys[input.Input.EVENT_DOWN]):
                 self.nextItem()
-            
 
     # end of update
 
@@ -165,14 +164,20 @@ class MainStage(Group):
             self.need_draw = False
 
         _updated = False
+        
         for p in self.parts:
             if(p.need_draw):
-                renderer.blit(self.bg.image, p.last_rect, p.last_rect)
-                p.draw(renderer)
-                #need calling for update, because last_rect cant.be updated
-                _r = p.rect
-                _updated = True
 
+                rs = p.last_rect
+                if(not isinstance(rs, list)):
+                    rs = [rs]
+                for r in rs:
+                    renderer.blit(self.bg.image, r, r)
+
+                p.draw(renderer)
+
+                _updated = True
+        
         return _updated
 
     # end of draw

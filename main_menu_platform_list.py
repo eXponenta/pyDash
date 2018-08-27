@@ -21,12 +21,11 @@ class MainMenuPlatformList(Group):
         self.selector = Sprite(pygame.image.load(
             game.assets["SELECTOR"]).convert_alpha())
 
-        # self.add(self.selector)
         self.createButtons()
+        self.add(self.selector)
+        self.add(*self.buttons)
 
-        self.__rect = None
-
-        self.last_rect = self.rect
+        self.last_rect = pygame.Rect(0,0,0,0)
 
         self.selected = 0
     # end of init
@@ -49,13 +48,11 @@ class MainMenuPlatformList(Group):
     # end of update
 
     def draw(self, renderer):
+        Group.draw(self, renderer)
 
-        #Group.draw(self, renderer)
-        self.selector.draw(renderer)
-
-        for b in self.buttons:
-            b.draw(renderer)
-
+        rects = list(self.spritedict.values())
+        self.last_rect =  rects[0].unionall(rects)
+        
         self.need_draw = False
 
     # end of draw
@@ -83,19 +80,6 @@ class MainMenuPlatformList(Group):
         # self.add(*self.buttons)
 
     # end of createButtons
-
-    @property
-    def rect(self):
-
-        self.last_rect = self.__rect
-        rect = self.selector.rect.copy()
-
-        for b in self.buttons:
-            rect = rect.union(b.rect)
-
-        self.__rect = rect
-
-        return rect
 
     @property
     def selected(self):

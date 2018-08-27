@@ -26,7 +26,7 @@ class Sprite(pygame.sprite.Sprite):
             clip.x =max(0, self.rect.x - clip.x)
             clip.y =max(0, self.rect.y - clip.y)
             
-        surface.blit(self.image, self.pos, clip)
+        self.last_rect =  surface.blit(self.image, self.pos, clip)
         self.need_draw = False
     
     @property
@@ -35,7 +35,11 @@ class Sprite(pygame.sprite.Sprite):
 
     @pos.setter
     def pos(self, pos):
+        
+        if(self.__pos != pos):
+            self.need_draw = True
+
         self.__pos = pos
         self.rect.x = pos[0]
         self.rect.y = pos[1]
-        self.need_draw = True
+        

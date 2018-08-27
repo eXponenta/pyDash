@@ -17,7 +17,7 @@ class FileList(pygame.sprite.Group):
         self.need_draw = True
 
         self.__rect = None
-        self.last_rect = None
+        self.last_rect = []
 
         self.game = game
         self.__item_constructor = item_contructor
@@ -43,11 +43,10 @@ class FileList(pygame.sprite.Group):
         self.page_counter = TextSprite("", game.assets['LIST_FONT'], size=18)
         self.update_counter(1, 1)
 
-        # self.add(*self.items_pool)
-        self.add(self.page_counter)
+        #self.add(*self.items_pool)
+        #self.add(self.page_counter)
         self.selected = 0
 
-        self.last_rect = self.rect.copy()
         self.deselect_all()
 
     # end of init
@@ -75,8 +74,9 @@ class FileList(pygame.sprite.Group):
                     txt = str(id) + ':' + txt
 
             itm.set_text(txt)
+            self.need_draw = self.need_draw or itm.need_draw
 
-        self.need_draw = True
+        #self.need_draw = True
 
     # end of update_items
 
@@ -86,18 +86,18 @@ class FileList(pygame.sprite.Group):
         self.__deselected = True
         self.update_items()
         self.selected = 0
-        self.need_draw = True
+        #self.need_draw = True
 
     # end of set_items
 
     def update_counter(self, all_pages, current_page):
 
-        #self.need_draw = True
-
         self.page_counter.set_text('СТРАНИЦА %d ИЗ %d' %
                                    (current_page, all_pages))
         self.page_counter.pos = [self.game.size[0] -
                                  40 - self.page_counter.rect.w, 520]
+
+        self.need_draw = self.need_draw or self.page_counter.need_draw
 
     # end of update_counter
 
@@ -107,18 +107,6 @@ class FileList(pygame.sprite.Group):
 
         self.__deselected = True
         self.need_draw = True
-
-    @property
-    def rect(self):
-
-        self.last_rect = self.__rect
-
-        rect = self.page_counter.rect
-        for item in self.items_pool:
-            rect = item.rect.union(rect)
-
-        self.__rect = rect
-        return rect
 
     @property
     def selected(self):
@@ -159,12 +147,15 @@ class FileList(pygame.sprite.Group):
         self.need_draw = True
 
     def draw(self, renderer):
+
         self.need_draw = False
-
-        #pygame.sprite.Group.draw(self, renderer)
+        
         self.page_counter.draw(renderer)
-        # render items with cliping rect
+        self.last_rect = [self.page_counter.last_rect]
 
-        for line in self.items_pool:
-            line.draw(renderer, self.text_clip_area)
+        for itm in self.items_pool:
+            itm.draw(renderer)
+            self.last_rect.append(itm.last_rect)
+        
+
 # end of FileList
